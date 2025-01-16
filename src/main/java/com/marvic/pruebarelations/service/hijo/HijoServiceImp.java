@@ -1,11 +1,14 @@
 package com.marvic.pruebarelations.service.hijo;
 
 import com.marvic.pruebarelations.hijo.model.Hijo;
+import com.marvic.pruebarelations.hijo.model.dto.HijoDTO;
+import com.marvic.pruebarelations.hijo.model.dto.NewHijoDTO;
 import com.marvic.pruebarelations.repository.HijoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class HijoServiceImp implements IHijoService{
@@ -17,13 +20,17 @@ public class HijoServiceImp implements IHijoService{
     }
 
     @Override
-    public List<Hijo> findAll() {
-        return hijoRepository.findAll();
+    public List<HijoDTO> findAll() {
+        return   hijoRepository.findAll().stream()
+                .map(hijo -> new HijoDTO(hijo))
+                .collect(Collectors.toList());
     }
+
+
 
     @Override
     @Transactional
-    public Hijo create(Hijo hijo) {
-        return hijoRepository.save(hijo);
+    public HijoDTO create(NewHijoDTO hijo) {
+        return new HijoDTO( hijoRepository.save(new Hijo(hijo)));
     }
 }
